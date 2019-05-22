@@ -2,3 +2,4 @@ DynamoDBLocal_lib
 DynamoDBLocal.jar
 node_modules
 .env
+shared-local-instance.db

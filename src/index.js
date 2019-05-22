@@ -1,5 +1,6 @@
-require('dotenv').load();
+require('dotenv').config();
 const AWS = require('aws-sdk');
+const initLocalBasic = require('./local-init/initLocalBasic');
 
 let environment = 'local';
 
