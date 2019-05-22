@@ -1,2 +1,4 @@
+DynamoDBLocal_lib
+DynamoDBLocal.jar
 node_modules
 .env

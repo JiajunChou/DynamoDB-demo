@@ -4,18 +4,12 @@
   "description": "# Dynamodb local initialize",
   "main": "index.js",
   "scripts": {
+    "local-init": "node src/index.js",
+    "aws-push": "node src/index.js aws",
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/JiajunChou/DynamoDB-demo.git"
   },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/JiajunChou/DynamoDB-demo/issues"
-  },
-  "homepage": "https://github.com/JiajunChou/DynamoDB-demo#readme",
   "dependencies": {
     "aws-sdk": "^2.460.0",
     "dotenv": "^8.0.0",
