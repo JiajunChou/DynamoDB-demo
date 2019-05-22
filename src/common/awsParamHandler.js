@@ -1,9 +1,9 @@
-exports.formateBatchWrite = function(table_name, preLoadData) {
+exports.formateBatchWrite = function (table_name, preLoadData) {
     const putItemParam = {
         RequestItems: {}
     };
     putItemParam.RequestItems[table_name] = [];
-    
+
     preLoadData.forEach(preloadItem => {
         const item = {
             PutRequest: {
@@ -14,3 +14,7 @@ exports.formateBatchWrite = function(table_name, preLoadData) {
     });
     return putItemParam;
 };
+
+exports.sleep = function (time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+}

@@ -1,89 +1,22 @@
 const awsParamHandler = require('../common/awsParamHandler');
-const preloadMember = require('../../data/table/item');
-
-const tableName = 'Basic';
-
-const partitionKeyName = 'pk';
-const partitionKeyType = 'N';
-const partitionKeySchemaType = 'HASH';
-const sortKeyName = 'typeRange';
-const sortKeyType = 'S';
-const sortKeySchemaType = 'RANGE';
-// GSI
-const gsiPartionKeyName = 'typeRange';
-const gsiPartionKeyType = 'S';
-const gsiPartionKeySchemaType = 'HASH';
-
-const gsiSortKeyName = 'attr1';
-const gsiSortKeyType = 'S';
-const gsiSortKeySchemaType = 'RANGE';
+const preloadBasic = require('../../data/item/basicItem');
+const BasicSchema = require('./../../data/table/basicSchema');
 
 module.exports = {
     run: (ddb, docClient) => {
+        tableName = BasicSchema.getTableName; // Basic
         // delete expired table
         const deleteTableParam = {
             TableName: tableName
         };
         // initial table
-
-        const createTableParam = {
-            TableName: tableName,
-            AttributeDefinitions: [{
-                AttributeName: partitionKeyName,
-                AttributeType: partitionKeyType
-            },
-            {
-                AttributeName: gsiPartionKeyName,
-                AttributeType: gsiPartionKeyType
-            },
-            {
-                AttributeName: gsiSortKeyName,
-                AttributeType: gsiSortKeyType
-            },
-            ],
-            KeySchema: [{
-                AttributeName: partitionKeyName,
-                KeyType: partitionKeySchemaType
-            },
-            {
-                AttributeName: sortKeyName,
-                KeyType: sortKeyType
-            },
-            ],
-            ProvisionedThroughput: {
-                ReadCapacityUnits: 20,
-                WriteCapacityUnits: 2,
-            },
-            GlobalSecondaryIndexes: [{
-                IndexName: 'Basic_GSI',
-                KeySchema: [{
-                    AttributeName: gsiPartionKeyName,
-                    KeyType: gsiPartionKeySchemaType
-                },
-                {
-                    AttributeName: gsiSortKeyName,
-                    KeyType: gsiSortKeySchemaType
-                },
-                ],
-                Projection: {
-                    ProjectionType: 'ALL',
-                },
-                ProvisionedThroughput: {
-                    ReadCapacityUnits: 20,
-                    WriteCapacityUnits: 2,
-                },
-            },],
-        };
-
-        // Member Data
-        const memberItem = preloadMember.getInitData();
-        const memberParam = awsParamHandler.formateBatchWrite(tableName, memberItem);
+        const createTableParam = BasicSchema.getBasicSchema;
+        // Data
+        const basicItem = preloadBasic.getInitData();
+        const basicItemParam = awsParamHandler.formateBatchWrite(tableName, basicItem);
 
         const deleteTableMustSuccess = new Promise(resolve => ddb.deleteTable(deleteTableParam).promise().then(r => {
             resolve(r);
-        }).then(() => {
-            console.log('[success] Create ', '\x1b[35m' + `${tableName}` + '\x1b[0m');
-            return docClient.batchWrite(memberParam).promise(); // Item Data
         }).catch(e => {
             resolve(e);
         }));
@@ -91,6 +24,11 @@ module.exports = {
         deleteTableMustSuccess.then(() => {
             console.log('[success] Delete ', '\x1b[35m' + `${tableName}` + '\x1b[0m');
             return ddb.createTable(createTableParam).promise();
+        }).then(r => {
+            console.log('[success] Create ', '\x1b[35m' + `${tableName}` + '\x1b[0m');
+            return docClient.batchWrite(basicItemParam).promise(); // Item Data
+        }).then(r => {
+            console.log('[success] Insert Basic in ', '\x1b[35m' + `${tableName}` + '\x1b[0m');
         }).catch(e => {
             console.log('failed', e);
         });
