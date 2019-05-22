@@ -1,10 +1,15 @@
 require('dotenv').config();
 const AWS = require('aws-sdk');
 const awsParamHandler = require('./common/awsParamHandler');
+
 const initLocalBasic = require('./local-init/initLocalBasic');
-const delAwsTable = require('./aws-init/deleteAwsTable');
-const crtAwsTable = require('./aws-init/createAwsTable');
-const isrAwsTable = require('./aws-init/insertAwsItem');
+const initLocalCar = require('./local-init/initLocalCar');
+
+const delAwsTable = require('./aws-init/initTable/deleteAwsTable');
+const crtAwsTable = require('./aws-init/initTable/createAwsTable');
+
+const isrAwsBasic = require('./aws-init/insertBasicItem');
+const isrAwsCar = require('./aws-init/insertCarItem');
 
 let environment = 'local';
 
@@ -24,7 +29,8 @@ if (environment === 'aws') {
     const ddb = new AWS.DynamoDB(config);  // for create, delete table
     const docClient = new AWS.DynamoDB.DocumentClient(config); // for batchWrite
 
-    isrAwsTable.run(docClient);
+    isrAwsBasic.run(docClient);
+    isrAwsCar.run(docClient);
 
     // delAwsTable.run(ddb);
     // crtAwsTable.run(ddb);
@@ -55,6 +61,7 @@ if (environment === 'aws') {
     const docClient = new AWS.DynamoDB.DocumentClient(config); // for batchWrite
 
     initLocalBasic.run(ddb, docClient);
+    initLocalCar.run(ddb, docClient);
     console.log('http://localhost:8000/shell/');
 
 }

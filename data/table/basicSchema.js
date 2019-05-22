@@ -17,7 +17,7 @@ const gsiSortKeySchemaType = 'RANGE';
 
 module.exports = {
     getTableName: tableName,
-    getBasicSchema:
+    getTableSchema:
     {
         TableName: tableName,
         AttributeDefinitions: [{

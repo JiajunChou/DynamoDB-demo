@@ -1,11 +1,11 @@
-const BasicSchema = require('../../data/table/basicSchema');
+const BasicSchema = require('../../../data/table/basicSchema');
 
 module.exports = {
     run: (ddb) => {
         // initial table
         tableName = BasicSchema.getTableName; // Basic
 
-        const createTableParam = BasicSchema.getBasicSchema;
+        const createTableParam = BasicSchema.getTableSchema;
 
         ddb.createTable(createTableParam).promise().then(r => {
             console.log(r);

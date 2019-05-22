@@ -1,19 +1,19 @@
 const awsParamHandler = require('../common/awsParamHandler');
-const preloadBasic = require('../../data/item/basicItem');
-const BasicSchema = require('../../data/table/basicSchema');
+const preloadCar = require('../../data/item/carItem');
+const CarSchema = require('../../data/table/carSchema');
 
 module.exports = {
     run: (ddb, docClient) => {
-        const tableName = BasicSchema.getTableName; // Basic
+        const tableName = CarSchema.getTableName; // CarStorage
         // delete expired table
         const deleteTableParam = {
             TableName: tableName
         };
         // initial table
-        const createTableParam = BasicSchema.getTableSchema;
+        const createTableParam = CarSchema.getTableSchema;
         // Data
-        const basicItem = preloadBasic.getInitData();
-        const basicItemParam = awsParamHandler.formateBatchWrite(tableName, basicItem);
+        const carItem = preloadCar.getInitData();
+        const carItemParam = awsParamHandler.formateBatchWrite(tableName, carItem);
 
         const deleteTableMustSuccess = new Promise(resolve =>
             ddb.deleteTable(deleteTableParam).promise().then(r => {
@@ -24,13 +24,13 @@ module.exports = {
         );
 
         deleteTableMustSuccess.then(() => {
-            console.log('[success] Delete ', '\x1b[36m' + `${tableName}` + '\x1b[0m');
+            console.log('[success] Delete ', '\x1b[35m' + `${tableName}` + '\x1b[0m');
             return ddb.createTable(createTableParam).promise();
         }).then(r => {
-            console.log('[success] Create ', '\x1b[36m' + `${tableName}` + '\x1b[0m');
-            return docClient.batchWrite(basicItemParam).promise(); // Item Data
+            console.log('[success] Create ', '\x1b[35m' + `${tableName}` + '\x1b[0m');
+            return docClient.batchWrite(carItemParam).promise(); // Item Data
         }).then(r => {
-            console.log('[success] Insert Basic in ', '\x1b[36m' + `${tableName}` + '\x1b[0m');
+            console.log('[success] Insert Car in ', '\x1b[35m' + `${tableName}` + '\x1b[0m');
         }).catch(e => {
             console.log('failed', e);
         });
