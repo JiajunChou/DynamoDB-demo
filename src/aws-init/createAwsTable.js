@@ -1,5 +1,4 @@
-
-const BasicSchema = require('./../../data/table/basicSchema');
+const BasicSchema = require('../../data/table/basicSchema');
 
 module.exports = {
     run: (ddb) => {

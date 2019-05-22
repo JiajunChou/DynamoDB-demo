@@ -1,6 +1,6 @@
 const awsParamHandler = require('../common/awsParamHandler');
 const preloadBasic = require('../../data/item/basicItem');
-const BasicSchema = require('./../../data/table/basicSchema');
+const BasicSchema = require('../../data/table/basicSchema');
 
 module.exports = {
     run: (ddb, docClient) => {

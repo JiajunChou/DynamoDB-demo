@@ -1,5 +1,5 @@
 const awsParamHandler = require('../common/awsParamHandler');
-const BasicSchema = require('./../../data/table/basicSchema');
+const BasicSchema = require('../../data/table/basicSchema');
 const TableName = BasicSchema.getTableName;
 const BasicItem = require('../../data/item/basicItem');
 

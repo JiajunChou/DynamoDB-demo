@@ -1,4 +1,4 @@
-const BasicSchema = require('./../../data/table/basicSchema');
+const BasicSchema = require('../../data/table/basicSchema');
 const tableName = BasicSchema.getTableName;
 
 module.exports = {
